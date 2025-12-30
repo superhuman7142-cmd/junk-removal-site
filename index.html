@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+
   <header class="wrap">
     <div class="brand">
       <div class="logo">JR</div>
@@ -24,17 +25,21 @@
   </header>
 
   <main class="wrap grid">
+
     <section class="card">
       <h2>Get a quote today</h2>
-      <p class="muted">Fill this out in under 30 seconds. We’ll connect you with a local contractor.</p>
+      <p class="muted">
+        Fill this out in under 30 seconds. We’ll connect you with a local contractor.
+      </p>
 
-      <!-- LEAD DELIVERY: sends the form to your email -->
+      <!-- ✅ FORM SUBMITS TO YOUR EMAIL -->
       <form action="https://formsubmit.co/superhuman7142@gmail.com" method="POST" class="form">
 
-        <!-- Settings -->
+        <!-- REQUIRED FOR FORMSUBMIT -->
         <input type="hidden" name="_subject" value="NEW Junk Removal Lead" />
         <input type="hidden" name="_captcha" value="false" />
-        <input type="hidden" name="_next" value="https://superhuman7142-cmd.github.io/junk-removal-site/thankyou.html" />
+        <input type="hidden" name="_next"
+          value="https://superhuman7142-cmd.github.io/junk-removal-site/thankyou.html" />
 
         <label>
           Name
@@ -66,11 +71,13 @@
           </select>
         </label>
 
-        <button class="btn full" type="submit">Get My Quote</button>
+        <button class="btn full" type="submit">
+          Get My Quote
+        </button>
       </form>
 
-      <p class="tiny" style="margin-top:10px;color:#b7c3e6;">
-        By submitting, you agree to be contacted about your request.
+      <p class="tiny" style="margin-top:10px;">
+        By submitting, you agree to be contacted regarding your request.
       </p>
     </section>
 
@@ -82,10 +89,12 @@
         <li>You get a quote and schedule pickup</li>
       </ol>
     </section>
+
   </main>
 
   <footer class="wrap footer">
     <p class="tiny">© Junk Removal</p>
   </footer>
+
 </body>
 </html>
