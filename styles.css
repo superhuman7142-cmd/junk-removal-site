@@ -1,0 +1,95 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b1220;
+  color: #eaf0ff;
+}
+
+.wrap {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+.brand {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.logo {
+  background: #2b63ff;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.sub {
+  color: #b7c3e6;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 800px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: #101a33;
+  padding: 20px;
+  border-radius: 16px;
+}
+
+.form label {
+  display: block;
+  margin-bottom: 12px;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  margin-top: 5px;
+}
+
+.btn {
+  background: #2b63ff;
+  color: white;
+  padding: 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  border: none;
+}
+
+.btn.outline {
+  background: transparent;
+  border: 1px solid #2b63ff;
+}
+
+.btn.full {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.ctaRow {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.steps {
+  color: #b7c3e6;
+}
