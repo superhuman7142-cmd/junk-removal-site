@@ -1,246 +1,169 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Junk Removal — Fast Pickup</title>
-  <style>
-    :root{
-      --bg:#0b0f17;
-      --panel:#0f172a;
-      --card:rgba(255,255,255,.06);
-      --border:rgba(255,255,255,.10);
-      --text:#e5e7eb;
-      --muted:#9ca3af;
-      --accent:#22c55e;
-      --accent2:#60a5fa;
-      --shadow: 0 18px 45px rgba(0,0,0,.45);
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-      color:var(--text);
-      background:
-        radial-gradient(1000px 550px at 15% -10%, rgba(96,165,250,.22), transparent 60%),
-        radial-gradient(900px 520px at 90% 0%, rgba(34,197,94,.16), transparent 55%),
-        linear-gradient(180deg, #070a10, #05070b 60%, #04060a);
-      min-height:100vh;
-    }
-    .wrap{max-width:980px; margin:0 auto; padding:28px 16px 64px;}
-    .topbar{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px; padding:10px 2px 18px;
-    }
-    .brand{
-      display:flex; align-items:center; gap:10px;
-      font-weight:900; letter-spacing:.2px;
-    }
-    .dot{
-      width:11px; height:11px; border-radius:999px;
-      background:linear-gradient(180deg, var(--accent), rgba(34,197,94,.5));
-      box-shadow:0 0 0 5px rgba(34,197,94,.12);
-    }
-    .pill{
-      font-size:12px; font-weight:700;
-      color:#dbeafe;
-      border:1px solid rgba(96,165,250,.25);
-      background:rgba(96,165,250,.10);
-      padding:7px 10px; border-radius:999px;
-    }
-    .hero{
-      border:1px solid var(--border);
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border-radius:20px;
-      padding:22px 18px;
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      position:relative;
-    }
-    .hero:before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:radial-gradient(650px 220px at 20% 0%, rgba(96,165,250,.22), transparent 70%),
-                 radial-gradient(650px 220px at 80% 10%, rgba(34,197,94,.16), transparent 70%);
-      pointer-events:none;
-      opacity:.8;
-    }
-    .hero > *{ position:relative; z-index:1; }
-    h1{
-      margin:2px 0 10px;
-      font-size:30px;
-      line-height:1.12;
-      letter-spacing:-.02em;
-    }
-    .subtitle{
-      margin:0 0 14px;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.5;
-    }
-    .grid{
-      display:grid;
-      gap:14px;
-      margin-top:14px;
-    }
-    @media (min-width: 840px){
-      .grid{ grid-template-columns: 1.2fr .8fr; align-items:start; }
-    }
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:16px;
-      box-shadow: 0 10px 26px rgba(0,0,0,.25);
-      backdrop-filter: blur(8px);
-    }
-    .card h2{margin:0 0 10px; font-size:18px}
-    .muted{color:var(--muted)}
-    .form-row{display:grid; gap:10px}
-    @media (min-width: 520px){
-      .form-row.two{ grid-template-columns: 1fr 1fr; }
-    }
-    input, textarea{
-      width:100%;
-      padding:12px 12px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(2,6,23,.55);
-      color:var(--text);
-      outline:none;
-      font-size:16px;
-    }
-    input::placeholder, textarea::placeholder{color:rgba(229,231,235,.55)}
-    input:focus, textarea:focus{
-      border-color: rgba(96,165,250,.45);
-      box-shadow: 0 0 0 4px rgba(96,165,250,.18);
-    }
-    textarea{min-height:110px; resize:vertical}
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      width:100%;
-      gap:10px;
-      padding:13px 14px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
-      text-decoration:none;
-      font-weight:900;
-      cursor:pointer;
-      font-size:16px;
-    }
-    .btn-primary{
-      background:linear-gradient(90deg, rgba(34,197,94,.95), rgba(34,197,94,.70));
-      color:#06100a;
-    }
-    .btn-primary:hover{filter:brightness(1.03)}
-    .btn-secondary{
-      background:rgba(96,165,250,.12);
-      border-color:rgba(96,165,250,.25);
-      color:#dbeafe;
-    }
-    .btn-secondary:hover{filter:brightness(1.06)}
-    .divider{height:1px; background:rgba(255,255,255,.10); margin:12px 0;}
-    ul{margin:10px 0 0 18px; color:var(--muted); line-height:1.6}
-    .price{
-      font-size:42px;
-      font-weight:1000;
-      letter-spacing:-.03em;
-      margin:6px 0 0;
-    }
-    .price small{font-size:13px; color:var(--muted); font-weight:700}
-    .note{font-size:12px; color:rgba(229,231,235,.62); margin-top:10px; line-height:1.45}
-    .contact{
-      display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;
-      font-size:13px; color:rgba(229,231,235,.75);
-    }
-    .contact strong{color:#fff}
-    .footer{
-      margin-top:18px;
-      color:rgba(229,231,235,.55);
-      font-size:12px;
-      text-align:center;
-    }
-    .tag{
-      display:inline-block;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(34,197,94,.25);
-      background:rgba(34,197,94,.10);
-      color:#bbf7d0;
-      font-weight:800;
-      font-size:12px;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Phoenix Junk Removal Leads</title>
+  <meta name="description" content="Buy verified junk removal leads for $20. Preview new leads before you buy.">
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-  <div class="wrap">
-    <div class="topbar">
-      <div class="brand"><span class="dot"></span> Junk Removal Leads</div>
-      <div class="pill">Fast • Same-day pickup requests</div>
-    </div>
-
-    <div class="hero">
-      <span class="tag">Homeowners: Get a free pickup quote</span>
-      <h1>Quick, local junk removal — no hassle</h1>
-      <p class="subtitle">
-        Fill out the form and a local junk removal pro will contact you quickly for fast pickup.
-      </p>
-
-      <div class="grid">
-        <!-- Homeowner form -->
-        <div class="card">
-          <h2>Request Pickup</h2>
-          <p class="muted" style="margin-top:-2px;">Takes 20 seconds. We’ll send your request to a local pro.</p>
-
-          <form action="https://formsubmit.co/superhuman7142@gmail.com" method="POST">
-            <div class="form-row two">
-              <input type="text" name="name" placeholder="Your Name" required>
-              <input type="tel" name="phone" placeholder="Phone Number" required>
-            </div>
-
-            <div class="form-row">
-              <input type="text" name="city" placeholder="City" required>
-              <textarea name="details" placeholder="What needs to be removed? (Example: couch + 3 bags + old TV)" required></textarea>
-            </div>
-
-            <input type="hidden" name="_subject" value="New Junk Removal Lead">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_next" value="thankyou.html">
-
-            <button class="btn btn-primary" type="submit">Get Free Pickup Quote</button>
-
-            <div class="contact">
-              Questions? Call/Text <strong>724-393-1387</strong>
-            </div>
-          </form>
-        </div>
-
-        <!-- Contractor buy box -->
-        <div class="card">
-          <h2>Contractors</h2>
-          <p class="muted" style="margin-top:-2px;">High-intent local lead. First come, first served.</p>
-
-          <div class="divider"></div>
-
-          <div class="price">$75 <small>per lead</small></div>
-          <p class="muted" style="margin:8px 0 0;">Pay once. Get the lead instantly.</p>
-
-          <a class="btn btn-primary" href="https://buy.stripe.com/bJeeVccJm9G2gbP4eYefC01">
-            Buy This Lead — $75
-          </a>
-
-          <a class="btn btn-secondary" href="contractors.html" style="margin-top:10px;">
-            Become a Buyer
-          </a>
-
-          <p class="note">Secure checkout powered by Stripe.</p>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">
+        <div class="logo">🔥</div>
+        <div class="brand-text">
+          <div class="brand-name">Phoenix Junk Leads</div>
+          <div class="brand-sub">Contractor lead marketplace</div>
         </div>
       </div>
 
-      <div class="footer">© Junk Removal Leads • Simple • Fast • Local</div>
+      <a class="btn btn-outline" href="#preview">Preview Leads</a>
     </div>
-  </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <div class="pill">New leads posted regularly</div>
+          <h1>Buy junk removal leads for <span class="highlight">$20</span> each.</h1>
+          <p class="subtext">
+            Preview the lead list before you pay. Contact info stays hidden on the site.
+            After purchase, you’ll be routed to confirmation and we deliver the full details.
+          </p>
+
+          <div class="cta-row">
+            <a class="btn btn-primary" target="_blank"
+               href="https://buy.stripe.com/14A5kCdNq2dA3p3h1KefC03">
+              Buy a Lead — $20
+            </a>
+            <a class="btn btn-ghost" href="#preview">See Available Leads</a>
+          </div>
+
+          <div class="trust-row">
+            <div class="trust-item">✅ Fast checkout (Stripe)</div>
+            <div class="trust-item">✅ No subscriptions</div>
+            <div class="trust-item">✅ Simple & direct</div>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <img
+            class="hero-img"
+            alt="Clean truck and hauling"
+            src="https://images.unsplash.com/photo-1619641805638-56f2d2e2a34c?auto=format&fit=crop&w=1200&q=80"
+          />
+          <div class="hero-card-bottom">
+            <div class="hero-card-title">Leads you can act on today</div>
+            <div class="hero-card-sub">Preview list → Pay $20 → Get full details</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section">
+      <div class="wrap">
+        <h2>How it works</h2>
+        <div class="grid3">
+          <div class="card">
+            <div class="card-title">1) Preview</div>
+            <div class="card-text">See first name, job description, area, and date.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">2) Pay $20</div>
+            <div class="card-text">Instant Stripe checkout (no account needed).</div>
+          </div>
+          <div class="card">
+            <div class="card-title">3) Receive details</div>
+            <div class="card-text">We deliver the full contact info after purchase.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEADS PREVIEW -->
+    <section id="preview" class="section section-soft">
+      <div class="wrap">
+        <div class="preview-head">
+          <div>
+            <h2>Live Leads Preview</h2>
+            <p class="muted">Contact info is hidden until purchase.</p>
+          </div>
+          <div class="preview-actions">
+            <input id="searchInput" class="input" type="text" placeholder="Search area or keyword…">
+            <button id="refreshBtn" class="btn btn-outline">Refresh</button>
+          </div>
+        </div>
+
+        <div id="status" class="status">Loading leads…</div>
+
+        <div id="leadsGrid" class="leads-grid" aria-live="polite"></div>
+
+        <div class="preview-footer">
+          <a class="btn btn-primary" target="_blank"
+             href="https://buy.stripe.com/14A5kCdNq2dA3p3h1KefC03">
+            Buy a Lead — $20
+          </a>
+          <div class="muted small">
+            Tip: Keep this page open and hit refresh during the day.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CUSTOMER FORM (unchanged conceptually) -->
+    <section class="section">
+      <div class="wrap">
+        <h2>Need junk removed?</h2>
+        <p class="muted">Fill this out and we’ll match you with a local contractor.</p>
+
+        <form class="form" action="https://formsubmit.co/superhuman7142@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="New Junk Removal Lead" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" value="thankyou.html" />
+
+          <div class="form-row">
+            <div>
+              <label>First Name</label>
+              <input class="input" name="first_name" required />
+            </div>
+            <div>
+              <label>City / Area</label>
+              <input class="input" name="area" required />
+            </div>
+          </div>
+
+          <label>What needs removed?</label>
+          <textarea class="input textarea" name="description" required placeholder="Example: old couch + 6 trash bags + broken dresser"></textarea>
+
+          <div class="form-row">
+            <div>
+              <label>Phone (hidden from preview)</label>
+              <input class="input" name="phone" required />
+            </div>
+            <div>
+              <label>Email (hidden from preview)</label>
+              <input class="input" type="email" name="email" required />
+            </div>
+          </div>
+
+          <button class="btn btn-primary" type="submit">Submit Request</button>
+          <div class="muted small">By submitting, you agree to be contacted about your request.</div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div class="muted">© <span id="year"></span> Phoenix Junk Leads</div>
+      <a class="muted" href="contractors.html">Contractors</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
