@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
+
+  <!-- TOP BAR -->
   <header class="topbar">
     <div class="wrap topbar-inner">
       <div class="brand">
@@ -23,6 +25,7 @@
   </header>
 
   <main>
+
     <!-- HERO -->
     <section class="hero">
       <div class="wrap hero-grid">
@@ -35,8 +38,7 @@
           </p>
 
           <div class="cta-row">
-            <a class="btn btn-primary" target="_blank"
-               href="https://buy.stripe.com/14A5kCdNq2dA3p3h1KefC03">
+            <a class="btn btn-primary" target="_blank" href="https://buy.stripe.com/14A5kCdNq2dA3p3h1KefC03">
               Buy a Lead — $20
             </a>
             <a class="btn btn-ghost" href="#preview">See Available Leads</a>
@@ -53,7 +55,7 @@
           <img
             class="hero-img"
             alt="Clean truck and hauling"
-            src="https://images.unsplash.com/photo-1619641805638-56f2d2e2a34c?auto=format&fit=crop&w=1200&q=80"
+            src="https://images.unsplash.com/photo-1619641805638-56f2d2e2a34c?auto=format&fit=crop&w=1200&q=60"
           />
           <div class="hero-card-bottom">
             <div class="hero-card-title">Leads you can act on today</div>
@@ -93,46 +95,47 @@
             <p class="muted">Contact info is hidden until purchase.</p>
           </div>
           <div class="preview-actions">
-            <input id="searchInput" class="input" type="text" placeholder="Search area or keyword…">
-            <button id="refreshBtn" class="btn btn-outline">Refresh</button>
+            <input id="searchInput" class="input" type="text" placeholder="Search area or keyword..." />
+            <!-- IMPORTANT: type="button" prevents accidental form submits -->
+            <button id="refreshBtn" class="btn btn-outline" type="button">Refresh</button>
           </div>
         </div>
 
-        <div id="status" class="status">Loading leads…</div>
-
+        <div id="status" class="status">Loading leads...</div>
         <div id="leadsGrid" class="leads-grid" aria-live="polite"></div>
 
         <div class="preview-footer">
-          <a class="btn btn-primary" target="_blank"
-             href="https://buy.stripe.com/14A5kCdNq2dA3p3h1KefC03">
-            Buy a Lead — $20
-          </a>
-          <div class="muted small">
-            Tip: Keep this page open and hit refresh during the day.
-          </div>
+          <a class="btn btn-primary" target="_blank" href="https://buy.stripe.com/14A5kCdNq2dA3p3h1KefC03">Buy a Lead — $20</a>
+          <div class="muted small">Tip: Keep this page open and hit refresh during the day.</div>
         </div>
       </div>
     </section>
 
-    <!-- CUSTOMER FORM (unchanged conceptually) -->
+    <!-- CUSTOMER FORM -->
     <section class="section">
       <div class="wrap">
         <h2>Need junk removed?</h2>
         <p class="muted">Fill this out and we’ll match you with a local contractor.</p>
 
-        <form class="form" action="https://formsubmit.co/superhuman7142@gmail.com" method="POST">
+        <form class="form"
+          action="https://formsubmit.co/superhuman7142@gmail.com"
+          method="POST"
+          accept-charset="UTF-8">
+
+          <!-- FormSubmit settings -->
           <input type="hidden" name="_subject" value="New Junk Removal Lead" />
           <input type="hidden" name="_captcha" value="false" />
-          <input type="hidden" name="_next" value="thankyou.html" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_next" value="https://superhuman7142-cmd.github.io/junk-removal-site/thankyou.html" />
 
           <div class="form-row">
             <div>
               <label>First Name</label>
-              <input class="input" name="first_name" required />
+              <input class="input" type="text" name="first_name" required />
             </div>
             <div>
               <label>City / Area</label>
-              <input class="input" name="area" required />
+              <input class="input" type="text" name="area" required />
             </div>
           </div>
 
@@ -142,7 +145,7 @@
           <div class="form-row">
             <div>
               <label>Phone (hidden from preview)</label>
-              <input class="input" name="phone" required />
+              <input class="input" type="tel" name="phone" required />
             </div>
             <div>
               <label>Email (hidden from preview)</label>
@@ -155,8 +158,10 @@
         </form>
       </div>
     </section>
+
   </main>
 
+  <!-- FOOTER -->
   <footer class="footer">
     <div class="wrap footer-inner">
       <div class="muted">© <span id="year"></span> Phoenix Junk Leads</div>
@@ -165,5 +170,8 @@
   </footer>
 
   <script src="script.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
