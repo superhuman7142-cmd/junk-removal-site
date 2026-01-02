@@ -1,128 +1,81 @@
-(() => {
-  const FEED_URL = window.LEADS_FEED_URL;
-  const BUY_URL = "https://buy.stripe.com/14A5kCdNq2dA3p3h1KefC03";
+// === LIVE LEADS FEED (Google Apps Script Web App URL) ===
+const FEED_URL = "https://script.google.com/macros/s/AKfycbzMQ61KIBYC1bLcQpmb_PslJGV0xEaVTF851f3uKdlsWpPzJqhpCXqIqO25_t5hlV-CHA/exec";
 
-  const leadsGrid = document.getElementById("leadsGrid");
-  const statusEl = document.getElementById("status");
-  const searchInput = document.getElementById("searchInput");
-  const refreshBtn = document.getElementById("refreshBtn");
-  const yearEl = document.getElementById("year");
+// How often to refresh the preview board (milliseconds)
+const REFRESH_MS = 30000;
 
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
+async function loadLeads() {
+  const listEl = document.getElementById("leadsList");
+  const statusEl = document.getElementById("leadsStatus");
 
-  let allLeads = [];
+  if (!listEl) return;
 
-  function escapeHtml(str) {
-    return String(str ?? "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
+  // Loading state
+  if (statusEl) statusEl.textContent = "Loading new leads…";
 
-  function normalizeLead(lead) {
-    const firstName = (lead?.firstName ?? "").toString().trim() || "New Lead";
-    const description = (lead?.description ?? "").toString().trim() || "No description provided";
-    const area = (lead?.area ?? "").toString().trim() || "Area not listed";
-    const date = (lead?.date ?? "").toString().trim() || "";
-    return { firstName, description, area, date };
-  }
+  try {
+    const res = await fetch(FEED_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error(`Feed error: ${res.status}`);
 
-  function setStatus(msg, kind = "info") {
-    if (!statusEl) return;
-    statusEl.textContent = msg;
+    const leads = await res.json();
 
-    // If your CSS has variants, we keep it safe:
-    statusEl.dataset.kind = kind;
-  }
+    // Clear existing
+    listEl.innerHTML = "";
 
-  function render(leads) {
-    if (!leadsGrid) return;
-
-    leadsGrid.innerHTML = "";
-
-    if (!leads || leads.length === 0) {
-      setStatus("No leads available yet. Check back soon.", "empty");
+    if (!Array.isArray(leads) || leads.length === 0) {
+      if (statusEl) statusEl.textContent = "No leads yet. Check back soon.";
       return;
     }
 
-    setStatus(`Showing ${leads.length} lead(s).`, "ok");
+    if (statusEl) statusEl.textContent = `Showing ${leads.length} newest lead(s).`;
 
-    const frag = document.createDocumentFragment();
+    // Render newest first (if your sheet is oldest-first, reverse it)
+    const ordered = leads.slice().reverse();
 
-    leads.forEach((lead) => {
-      const L = normalizeLead(lead);
-
-      // Uses your existing CSS "card" class to match the rest of your theme
+    ordered.forEach((lead, idx) => {
       const card = document.createElement("div");
-      card.className = "card";
+      card.className = "lead-card";
+
+      const firstName = escapeHtml(lead.firstName ?? "");
+      const description = escapeHtml(lead.description ?? "");
+      const area = escapeHtml(lead.area ?? "");
+      const date = escapeHtml(lead.date ?? "");
 
       card.innerHTML = `
-        <div class="card-title">${escapeHtml(L.firstName)}</div>
-        <div class="card-text">${escapeHtml(L.description)}</div>
-        <div class="muted small" style="margin-top:8px;">
-          <strong>Area:</strong> ${escapeHtml(L.area)}${L.date ? ` • <strong>Date:</strong> ${escapeHtml(L.date)}` : ""}
+        <div class="lead-top">
+          <div class="lead-title">${firstName || "New Lead"}</div>
+          <div class="lead-date">${date || ""}</div>
         </div>
-        <div style="margin-top:12px;">
-          <a class="btn btn-primary" target="_blank" href="${BUY_URL}">
-            Buy This Lead — $20
-          </a>
-        </div>
+        <div class="lead-row"><strong>Job:</strong> ${description || "-"}</div>
+        <div class="lead-row"><strong>Area:</strong> ${area || "-"}</div>
+        <div class="lead-row lead-locked">🔒 Contact info locked until purchase</div>
       `;
 
-      frag.appendChild(card);
+      listEl.appendChild(card);
     });
-
-    leadsGrid.appendChild(frag);
+  } catch (err) {
+    console.error(err);
+    if (statusEl) statusEl.textContent = "Could not load live leads right now.";
+    listEl.innerHTML = `
+      <div class="lead-card">
+        <div class="lead-row"><strong>Feed error</strong></div>
+        <div class="lead-row">If this keeps happening, we’ll adjust the Apps Script deployment permissions.</div>
+      </div>
+    `;
   }
+}
 
-  function filterAndRender() {
-    const q = (searchInput?.value ?? "").toLowerCase().trim();
-    if (!q) return render(allLeads);
+function escapeHtml(str) {
+  return String(str)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
 
-    const filtered = allLeads.filter((l) => {
-      const L = normalizeLead(l);
-      return (
-        L.firstName.toLowerCase().includes(q) ||
-        L.description.toLowerCase().includes(q) ||
-        L.area.toLowerCase().includes(q) ||
-        L.date.toLowerCase().includes(q)
-      );
-    });
-
-    render(filtered);
-  }
-
-  async function loadLeads() {
-    if (!FEED_URL) {
-      setStatus("Feed URL is missing. (window.LEADS_FEED_URL not found)", "error");
-      return;
-    }
-
-    setStatus("Loading leads…", "loading");
-
-    try {
-      // cache-bust to avoid stale results
-      const url = FEED_URL + (FEED_URL.includes("?") ? "&" : "?") + "t=" + Date.now();
-      const res = await fetch(url, { method: "GET" });
-      if (!res.ok) throw new Error(`Feed request failed: ${res.status}`);
-
-      const data = await res.json();
-      allLeads = Array.isArray(data) ? data.map(normalizeLead) : [];
-
-      filterAndRender();
-    } catch (err) {
-      console.error(err);
-      setStatus("Could not load leads right now. Tap Refresh in a minute.", "error");
-      if (leadsGrid) leadsGrid.innerHTML = "";
-    }
-  }
-
-  // Wire controls
-  if (refreshBtn) refreshBtn.addEventListener("click", loadLeads);
-  if (searchInput) searchInput.addEventListener("input", filterAndRender);
-
-  // Initial load
+// Start + auto refresh
+document.addEventListener("DOMContentLoaded", () => {
   loadLeads();
-})();
+  setInterval(loadLeads, REFRESH_MS);
+});
