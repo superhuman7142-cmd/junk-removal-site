@@ -1,5 +1,5 @@
 // === LIVE LEADS FEED (Google Apps Script Web App URL) ===
-const FEED_URL = "https://script.google.com/macros/s/AKfycbzMQ61KIBYC1bLcQpmb_PslJGV0xEaVTF851f3uKdlsWpPzJqhpCXqIqO25_t5hlV-CHA/exec";
+const FEED_URL = "https://script.google.com/macros/s/AKfycbzkyOE39RqGKsOIq4c8tOwr0VL5G-jYDHMXPiKlmIXNyK4nZFX21HfrkOqstCHCT67YRg/exec";
 
 // How often to refresh the preview board (milliseconds)
 const REFRESH_MS = 30000;
